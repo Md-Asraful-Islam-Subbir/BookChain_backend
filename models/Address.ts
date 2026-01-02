@@ -1,18 +1,48 @@
-import mongoose, { Document, Schema } from 'mongoose';
-import bcrypt from 'bcryptjs';
+import mongoose, { Document, Schema } from "mongoose";
 
-export interface IUser extends Document {
-  name: string;
-  email: string;
-  password?: string;
-  googleId?: string;
-  profilePicture?: string;
-  phoneNumber?: string;
-  isVerified: boolean;
-  verificationToken?: string;
-  resetPasswordToken?: string;
-  resetPasswordExpires?: Date;
-  agreeTerms: boolean;
-  addresses: mongoose.Types.ObjectId[];
-  comparePassword(candidatePassword: string): Promise<boolean>;
-} 
+export interface IAddress extends Document {
+  user: mongoose.Types.ObjectId;
+  addressLine1: string;
+  addressLine2?: string;
+  phoneNumber: string;
+  city: string;
+  state: string;
+  pincode: string;
+}
+
+const addressSchema = new Schema<IAddress>(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    addressLine1: {
+      type: String,
+      required: true,
+    },
+    addressLine2: {
+      type: String,
+      default: null,
+    },
+    phoneNumber: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      required: true,
+    },
+    pincode: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model<IAddress>("Address", addressSchema);
