@@ -5,6 +5,7 @@ import cors from 'cors'
 import cookiesParser from 'cookie-parser';
 import connectDb from './config/dbConnection';
 import authRoutes from './routes/authRoutes'
+import productRoutes from './routes/productRoute'
 dotenv.config();
 
 const PORT=process.env.PORT||8080;
@@ -24,7 +25,7 @@ app.use(cookiesParser());
 connectDb();
 //api endpoints
 app.use('/api/auth',authRoutes);
-
+app.use('/api/product',productRoutes);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
