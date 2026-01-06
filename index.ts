@@ -6,6 +6,9 @@ import cookiesParser from 'cookie-parser';
 import connectDb from './config/dbConnection';
 import authRoutes from './routes/authRoutes'
 import productRoutes from './routes/productRoute'
+import cartRoutes from './routes/cartRoute'
+import wishlistRoutes from './routes/wishlistRoutes'
+
 dotenv.config();
 
 const PORT=process.env.PORT||8080;
@@ -26,6 +29,9 @@ connectDb();
 //api endpoints
 app.use('/api/auth',authRoutes);
 app.use('/api/product',productRoutes);
+app.use('/api/cart',cartRoutes);
+app.use('/api/wishlist',wishlistRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

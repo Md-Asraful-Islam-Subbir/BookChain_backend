@@ -44,3 +44,39 @@ export const addToCart = async (req: Request, res: Response) => {
     return response(res, 500, "Internal Server Error");
   }
 };
+
+export const removeFromCart = async (req: Request, res: Response) => {
+  try {
+    const userId = req.id;
+    const { productId} = req.params;
+
+    let cart = await CartItems.findOne({ user: userId });
+    if (!cart) {
+      return response(res, 404, "Cart is not found for this user");
+    }
+    cart.items=cart.items.filter((item)=>item.product.toString()!==productId)
+    await cart.save();
+
+    return response(res, 200, "Product removed to cart successfully", cart);
+  } catch (error) {
+    console.log(error);
+    return response(res, 500, "Internal Server Error");
+  }
+};
+
+export const getCartByUser = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId;
+
+    let cart = await CartItems.findOne({ user: userId });
+    if (!cart) {
+      return response(res, 404, "Cart is empty",{items:[]});
+    }
+    await cart.save();
+
+    return response(res, 200, "User cart get successfully", cart);
+  } catch (error) {
+    console.log(error);
+    return response(res, 500, "Internal Server Error");
+  }
+};
