@@ -14,9 +14,9 @@ export interface IProduct extends Document {
     finalPrice: number;
     shippingCharge: string;
     seller: mongoose.Types.ObjectId;
-    paymentMode: "ssl" | "Bank Account";
+    paymentMode: "UPI" | "Bank Account";
     paymentDetails: {
-        sslId?: string;
+        upiId?: string;
         bankDetails?: {
             accountNumber: string;
             ifscCode: string;
@@ -38,9 +38,9 @@ const productSchema = new Schema<IProduct>({
   description: { type: String },
   finalPrice: { type: Number, required: true },
   shippingCharge: { type: String},
-  paymentMode: { type: String, enum: ['ssl', 'Bank Account'], required: true },
+  paymentMode: { type: String, enum: ['UPI', 'Bank Account'], required: true },
   paymentDetails: {
-    sslId: { type: String },
+    upiId: { type: String },
     bankDetails: {
             accountNumber: { type: String },
             ifscCode: { type: String },
