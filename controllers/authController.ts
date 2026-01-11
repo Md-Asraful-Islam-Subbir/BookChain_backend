@@ -29,7 +29,7 @@ export const register = async (req: Request, res: Response) => {
     return response(
       res,
       200,
-      "User registration successful, Please check your email box to verify your account"
+      "User registration successful, Please check your email box to verify your account",result
     );
   } catch (error) {
     console.log(error);
@@ -39,13 +39,13 @@ export const register = async (req: Request, res: Response) => {
 
 export const verifyEmail = async (req: Request, res: Response) => {
   try {
-    const token = req.params;
+    const {token} = req.params;
     const user = await User.findOne({ varificationToken: token });
     if (!user) {
       return response(res, 400, 'Invaild or expired verification token')
     }
     user.isVerified = true;
-    user.verificationToken = undefined;
+    user.varificationToken = undefined;
     const accessToken = generateToken(user);
     res.cookie('access_token', accessToken, {
       httpOnly: true,
@@ -104,9 +104,9 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
 export const resetPassword = async (req: Request, res: Response) => {
   try {
-    const token = req.params;
+    const {token} = req.params;
     const { newPassword } = req.body;
-    const user = await User.findOne({ resetPasswordToken: token, resetPasswordExpires: { gt: Date.now() } });
+    const user = await User.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
     if (!user) {
       return response(res, 400, 'Invaild or expired reset password token')
     }

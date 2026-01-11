@@ -9,7 +9,7 @@ export interface IUser extends Document {
   profilePicture?: string;
   phoneNumber?: string;
   isVerified: boolean;
-  verificationToken?: string;
+  varificationToken?: string;
   resetPasswordToken?: string;
   resetPasswordExpires?: Date;
   agreeTerms: boolean;
@@ -27,7 +27,7 @@ const userSchema = new Schema<IUser>({
   phoneNumber: { type: String, default:null },
   isVerified: { type: Boolean, default: false },
    agreeTerms: { type: Boolean, default: false },
-  verificationToken: { type: String, default: null },
+  varificationToken: { type: String, default: null },
   resetPasswordToken: { type: String, default: null },
   resetPasswordExpires: { type: Date, default: null },
   addresses: [{type:Schema.Types.ObjectId, ref: 'Address' }],
