@@ -34,5 +34,5 @@ const uploadToCloudinary = (file: CustomFile): Promise<UploadApiResponse> => {
     });
 };
 
-const multerMiddleware: RequestHandler=multer({dest:"uploads/"}).array('image',4);
+const multerMiddleware: RequestHandler=multer({dest:"uploads/"}).array('images',4);
 export { uploadToCloudinary,multerMiddleware };
