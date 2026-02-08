@@ -4,7 +4,7 @@ import * as userController from '../controllers/userController'
 
 const router=express.Router();
 
-router.put('/create-or-update',authenticatedUser,userController.updateUserProfile)
+router.put('/profile/update/:userId',authenticatedUser,userController.updateUserProfile)
 
 
 export default router;

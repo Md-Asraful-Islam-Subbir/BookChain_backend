@@ -12,6 +12,7 @@ import addressRoutes from './routes/addressRoutes'
 import userRoutes from './routes/userRoutes'
 import orderRoutes from './routes/orderRoute'
 import passport from './controllers/strategy/googleStrategy'
+import paymentRoutes from './routes/payment'
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ const corsOption = {
 };
 
 app.use(cors(corsOption));
+
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookiesParser());
@@ -39,6 +41,7 @@ app.use('/api/wishlist',wishlistRoutes);
 app.use('/api/user/address',addressRoutes);
 app.use('/api/user',userRoutes);
 app.use('/api/order',orderRoutes);
+app.use('/api/payment', paymentRoutes);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

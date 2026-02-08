@@ -15,11 +15,7 @@ export interface IOrder extends Document {
     shippingAddress: mongoose.Types.ObjectId | IAddress;
     paymentStatus: 'pending' | 'complete' | 'failed';
     paymentMethod: string;
-    paymentDetails: {
-        razorpay_order_id: string;
-        razorpay_payment_id: string;
-        razorpay_signature: string;
-    };
+   paymentDetails: Record<string, any>;
     status: 'processing' | 'shipped' | 'delivered' | 'cancelled';
 }
 const orderItemsSchema = new Schema<IOrderItem>({
@@ -38,11 +34,7 @@ const OderSchema = new Schema<IOrder>({
         default: 'pending'
     },
     paymentMethod: { type: String },
-    paymentDetails: {
-        razorpay_order_id: { type: String },
-        razorpay_payment_id: { type: String },
-        razorpay_signature: { type: String }
-    },
+  paymentDetails: { type: Schema.Types.Mixed, default: {} },
     status: {
         type: String,
         enum: ['processing', 'shipped', 'delivered', 'cancelled'],

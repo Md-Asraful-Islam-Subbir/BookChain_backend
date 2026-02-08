@@ -5,51 +5,68 @@ import Order from "../models/Order";
 
 
 export const createOrUpdateOrder = async (req: Request, res: Response) => {
-    try {
-        const userId = req.id;
-        const { orderId, shippingAddress, paymentMethod, totalAmount, paymentDetails } = req.body;
+  try {
+    const userId = req.id;
 
-        const cart = await CartItems.findOne({ user: userId }).populate('items.product')
-        if (!cart || cart.items.length === 0) {
-            return response(res, 400, 'Cart is empty');
-        }
+    const body = req.body?.updates ?? req.body;
+    const {
+      orderId,
+      shippingAddress,
+      paymentMethod,
+      totalAmount,
+      paymentDetails,
+    } = body || {};
 
-        let order = await Order.findOne({ _id: orderId })
+    console.log('BODY:', body);
 
-        if (order) {
-            order.shippingAddress = shippingAddress || order.shippingAddress;
-            order.paymentMethod = paymentMethod || order.paymentMethod;
-            order.totalAmount = totalAmount || order.totalAmount
-            if (paymentDetails) {
-                order.paymentDetails = paymentDetails;
-                order.paymentStatus = 'complete';
-                order.status = 'processing';
-            }
-        }
-        else {
-            order = new Order({
-                user: userId,
-                items: cart.items,
-                totalAmount,
-                shippingAddress,
-                paymentMethod,
-                paymentDetails,
-                paymentStatus: paymentDetails ? 'complete' : 'pending'
-            })
-        }
-        await order.save();
-        if (paymentDetails) {
-            await CartItems.findByIdAndUpdate(
-                { user: userId },
-                { $set: { items: [] } }
-            )
-        }
-        return response(res, 200, 'Order created successfully', order);
-    } catch (error) {
-        console.log(error);
-        return response(res, 500, 'Server error', error);
+    let order = null;
+    let cart = null;
+
+    if (orderId) {
+      order = await Order.findById(orderId);
+      if (!order) return response(res, 404, 'Order not found');
+
+      if (shippingAddress) order.shippingAddress = shippingAddress;
+      if (paymentMethod) order.paymentMethod = paymentMethod;
+      if (totalAmount) order.totalAmount = totalAmount;
+
+      if (paymentDetails) {
+        order.paymentDetails = paymentDetails;
+        order.paymentStatus = 'complete';
+        order.status = 'processing';
+      }
+    } else {
+      cart = await CartItems.findOne({ user: userId }).populate('items.product');
+      if (!cart || cart.items.length === 0) {
+        return response(res, 400, 'Cart is empty');
+      }
+
+      order = new Order({
+        user: userId,
+        items: cart.items,
+        totalAmount,
+        shippingAddress,
+        paymentMethod,
+        paymentStatus: 'pending',
+      });
     }
-}
+
+    await order.save();
+
+    if (paymentDetails) {
+      await CartItems.findOneAndUpdate(
+        { user: userId },
+        { $set: { items: [] } }
+      );
+    }
+
+    return response(res, 200, 'Order updated successfully', order);
+  } catch (error) {
+    console.error(error);
+    return response(res, 500, 'Server error', error);
+  }
+};
+
 
 export const getOrderByUser = async (req: Request, res: Response) => {
     try {

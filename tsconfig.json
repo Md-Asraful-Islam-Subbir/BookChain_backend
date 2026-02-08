@@ -1,10 +1,16 @@
 {
-    "compilerOptions": {
-        "target": "ES6",
-        "module": "commonjs",
-        "outDir": "./dist",
-        "rootDir": "./",
-        "strict": true,
-        "esModuleInterop": true
-    },
+  "compilerOptions": {
+    "target": "ES2020",                       // newer JS features
+    "module": "commonjs",                     // Node.js modules
+    "outDir": "./dist",                        // compiled JS output
+    "rootDir": "./",                           // root of TS files
+    "strict": true,                            // strict type checking
+    "esModuleInterop": true,                   // allow default imports from CommonJS
+    "forceConsistentCasingInFileNames": true, // file name consistency
+    "skipLibCheck": true,                      // skip type checks for node_modules
+    "typeRoots": ["./node_modules/@types", "./types"],  // include your custom types
+    "resolveJsonModule": true                  // allow importing JSON if needed
+  },
+  "include": ["./**/*.ts"],                    // include all TS files
+  "exclude": ["node_modules", "dist"]          // exclude build and node_modules
 }
