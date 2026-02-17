@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import cookiesParser from 'cookie-parser';
-import connectDb from './config/dbConnection';
+import connectDb from './config/dbConnection.js';
 import authRoutes from './routes/authRoutes'
 import productRoutes from './routes/productRoute'
 import cartRoutes from './routes/cartRoute'
