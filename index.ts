@@ -33,6 +33,10 @@ app.use(cookiesParser());
 app.use(passport.initialize())
 
 connectDb();
+app.get("/", (req, res) => {
+  res.send("✅ BookChain Backend API is running...");
+});
+
 //api endpoints
 app.use('/api/auth',authRoutes);
 app.use('/api/product',productRoutes);
